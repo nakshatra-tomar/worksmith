@@ -20,11 +20,12 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    private String name;
 
     @OneToOne
-   
+    @JoinColumn(name = "project_id")
     private Project project;
+
 
 
 
