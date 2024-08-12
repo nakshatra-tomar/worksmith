@@ -26,6 +26,15 @@ public class Chat {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    @JsonIgnore
+    @OneToMany(mappedBy ="chat" ,cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Message> messages;
+
+
+    // Users participating in the chat
+    @ManyToMany
+    private List<User> users=new ArrayList<User>();
+
 
 
 
