@@ -3,13 +3,47 @@ package com.worksmith.service;
 import com.worksmith.model.Chat;
 import com.worksmith.model.Project;
 import com.worksmith.model.User;
+import com.worksmith.repository.ProjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class ProjectServiceImpl implements ProjectService{
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private UserService userService;
+
+
+
+
+
+
     @Override
-    public Project createProject(Project project, User user) throws Exception {
-        return null;
+    public Project createProject(Project project,User user) throws Exception {
+
+        Project createdProject=new Project();
+
+        createdProject.setOwner(user);
+        createdProject.setTags(project.getTags());
+        createdProject.setName(project.getName());
+        createdProject.setCategory(project.getCategory());
+        createdProject.setDescription(project.getDescription());
+        createdProject.getTeam().add(user);
+
+
+        System.out.println(createdProject);
+        Project savedProject=projectRepository.save(createdProject);
+
+        savedProject.getTeam().add(user);
+
+        Chat chat = new Chat();
+        chat.setProject(savedProject);
+        Chat projectChat = chatService.createChat(chat);
+        savedProject.setChat(projectChat);
+
     }
 
     @Override
