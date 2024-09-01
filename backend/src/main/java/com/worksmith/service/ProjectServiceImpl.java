@@ -17,6 +17,10 @@ public class ProjectServiceImpl implements ProjectService{
     private UserService userService;
 
 
+    @Autowired
+    private ChatService chatService;
+
+
 
 
 
@@ -43,6 +47,8 @@ public class ProjectServiceImpl implements ProjectService{
         chat.setProject(savedProject);
         Chat projectChat = chatService.createChat(chat);
         savedProject.setChat(projectChat);
+
+        return savedProject;
 
     }
 
