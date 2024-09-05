@@ -94,26 +94,82 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Project updateProject(Project updatedProject, Long id) throws Exception {
-        return null;
+        Project project = getProjectById(id);
+
+        if (project != null) {
+            // Update the existing project with the fields from updatedProject
+            if (updatedProject.getName() != null) {
+                project.setName(updatedProject.getName());
+            }
+
+            if (updatedProject.getDescription() != null) {
+                project.setDescription(updatedProject.getDescription());
+            }
+
+            if (updatedProject.getTags() != null) {
+                project.setTags(updatedProject.getTags());
+            }
+
+            // Save the updated project once
+            return projectRepository.save(project);
+        }
     }
 
     @Override
     public List<Project> searchProjects(String keyword, User user) throws Exception {
-        return List.of();
+            String partialName = "%" + keyword + "%";
+
+
+//			projectRepository.findByPartialNameAndTeamIn(partialName, user);
+            List<Project> list = projectRepository.findByNameContainingAndTeamContains(keyword,user);
+            if(list!=null) {
+                return list;
+            }
+            throw new Exception("No Projects available");
     }
 
     @Override
     public void addUserToProject(Long projectId, Long userId) throws Exception {
 
+            Project project = projectRepository.findById(projectId).orElseThrow(() -> new Exception("Project not found"));
+            User user = userService.findUserById(userId);
+
+            if (!project.getTeam().contains(user)) {
+                project.getChat().getUsers().add(user);
+                project.getTeam().add(user);
+                projectRepository.save(project);
+            }
+
+
     }
 
     @Override
     public void removeUserFromProject(Long projectId, Long userId) throws Exception {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new Exception("Project not found"));
+        User user = userService.findUserById(userId);
 
+        if (project.getTeam().contains(user)) {
+            project.getTeam().remove(user);
+            project.getChat().getUsers().remove(user);
+        }
     }
 
     @Override
     public Chat getChatByProjectId(Long projectId) throws Exception {
-        return null;
+        Project project = projectRepository.findById(projectId).orElseThrow(()-> new Exception("Project not found"));
+        if( project != null ) return project.getChat() ;
+
+
+        throw new Exception("No chats available");
+
+    }
+
+    public List<User> getUsersByProjectId(Long projectId) throws Exception {
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if( project != null) return project.getChat().getUsers();
+
+        throw new Exception("No project found with the id: "+projectId);
+    }
     }
 }
