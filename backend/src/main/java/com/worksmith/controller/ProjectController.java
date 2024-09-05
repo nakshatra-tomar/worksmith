@@ -1,6 +1,7 @@
 package com.worksmith.controller;
 
 
+import com.worksmith.model.Chat;
 import com.worksmith.model.Project;
 import com.worksmith.model.User;
 import com.worksmith.response.MessageResponse;
@@ -71,5 +72,31 @@ public class ProjectController {
         MessageResponse response =new MessageResponse(projectService.deleteProject(projectId, user.getId()));
         userService.updateUsersProjectSize(user,-1);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity< List<Project>> searchProjects(
+            @RequestParam(required = false) String keyword,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception, Exception {
+        User user=userService.findUserProfileByJwt(jwt);
+        List<Project> projects = projectService.searchProjects(keyword,user);
+        return ResponseEntity.ok(projects);
+    }
+
+    @PostMapping("/{userId}/add-to-project/{projectId}")
+    public ResponseEntity<MessageResponse> addUserToProject(
+            @PathVariable Long userId,
+            @PathVariable Long projectId) throws Exception, Exception {
+        projectService.addUserToProject(projectId, userId);
+        MessageResponse response =new MessageResponse("User added to the project successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{projectId}/chat")
+    public ResponseEntity<Chat> getChatByProjectId(@PathVariable Long projectId)
+            throws Exception {
+        Chat chat = projectService.getChatByProjectId(projectId);
+        return chat != null ? ResponseEntity.ok(chat) : ResponseEntity.notFound().build();
     }
 }
