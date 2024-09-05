@@ -8,7 +8,7 @@ import com.worksmith.model.Project;
 import com.worksmith.model.User;
 
 public interface ProjectService {
-    Project createProject(Project project, User user) throws Exception;
+    Project createProject(Project project, Long id) throws Exception;
 
 
     List<Project> getProjectsByTeam(User user,String category,String tag) throws Exception;
@@ -16,7 +16,7 @@ public interface ProjectService {
 
     Project getProjectById(Long projectId) throws Exception;
 
-    void deleteProject(Long projectId,Long userId) throws Exception;
+    String deleteProject(Long projectId,Long userId) throws Exception;
 
     Project updateProject(Project updatedProject, Long id) throws Exception;
 

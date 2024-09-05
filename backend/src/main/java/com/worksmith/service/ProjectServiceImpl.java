@@ -28,8 +28,8 @@ public class ProjectServiceImpl implements ProjectService{
 
 
     @Override
-    public Project createProject(Project project,User user) throws Exception {
-
+    public Project createProject(Project project,Long id) throws Exception  {
+        User user = userService.findUserById(id);
         Project createdProject=new Project();
 
         createdProject.setOwner(user);
@@ -39,9 +39,8 @@ public class ProjectServiceImpl implements ProjectService{
         createdProject.setDescription(project.getDescription());
         createdProject.getTeam().add(user);
 
-
         System.out.println(createdProject);
-        Project savedProject=projectRepository.save(createdProject);
+        Project savedProject=projectRepository.save(project);
 
         savedProject.getTeam().add(user);
 
@@ -49,9 +48,7 @@ public class ProjectServiceImpl implements ProjectService{
         chat.setProject(savedProject);
         Chat projectChat = chatService.createChat(chat);
         savedProject.setChat(projectChat);
-
         return savedProject;
-
     }
 
     @Override
@@ -83,12 +80,14 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public void deleteProject(Long projectId, Long userId) throws Exception {
-
-        getProjectById(projectId);
-
-        projectRepository.deleteById(projectId);
-
+    public String deleteProject(Long projectId,Long id) throws Exception {
+        User user = userService.findUserById(id);
+        System.out.println("User ____>"+user);
+        if(user != null) {
+            projectRepository.deleteById(projectId);
+            return "The project has been deleted";
+        }
+        throw new Exception("User does not exists");
     }
     
 
@@ -113,6 +112,7 @@ public class ProjectServiceImpl implements ProjectService{
             // Save the updated project once
             return projectRepository.save(project);
         }
+        throw new Exception("The project does not exist");
     }
 
     @Override
@@ -171,5 +171,5 @@ public class ProjectServiceImpl implements ProjectService{
 
         throw new Exception("No project found with the id: "+projectId);
     }
-    }
+
 }
