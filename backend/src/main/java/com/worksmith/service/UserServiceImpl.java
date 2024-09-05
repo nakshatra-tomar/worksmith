@@ -1,6 +1,8 @@
 package com.worksmith.service;
 
 import com.worksmith.config.JwtProvider;
+import com.worksmith.exception.ProjectException;
+import com.worksmith.exception.UserException;
 import com.worksmith.model.User;
 import com.worksmith.repository.UserRepository;
 import jdk.jshell.spi.ExecutionControl;
@@ -14,14 +16,14 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
-    public User findUserProfileByJwt(String jwt) throws Exception{
+    public User findUserProfileByJwt(String jwt) throws UserException, ProjectException {
         String email = JwtProvider.getEmailFromToken(jwt);
 
         return findUserByEmail(email);
     }
 
     @Override
-    public User findUserByEmail(String email) throws Exception {
+    public User findUserByEmail(String email) throws UserException {
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
@@ -29,14 +31,14 @@ public class UserServiceImpl implements UserService{
             return user;
         }
 
-        throw new Exception("No user exists with username " + email);
+        throw new UserException("No user exists with username " + email);
     }
 
-    public User findUserById(Long userId) throws Exception {
+    public User findUserById(Long userId) throws UserException {
         Optional<User> opt = userRepository.findById(userId);
 
         if (opt.isEmpty()) {
-            throw new Exception("No user found with ID: " + userId);
+            throw new UserException("No user found with ID: " + userId);
         }
         return opt.get();
     }
