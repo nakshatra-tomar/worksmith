@@ -87,6 +87,11 @@
 			<version>0.11.1</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 <!--		https://stackoverflow.com/questions/61731215/jwt-dependency-not-found-in-springboot-2-2-6       -->
 	</dependencies>
 
