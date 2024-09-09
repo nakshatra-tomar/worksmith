@@ -10,10 +10,13 @@ import com.worksmith.model.User;
 import com.worksmith.repository.IssueRepository;
 import com.worksmith.request.IssueRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@Service
 public class IssueServiceImpl implements IssueService {
 
 
