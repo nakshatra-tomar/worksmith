@@ -46,7 +46,7 @@ public class CommentController {
         User user = userService.findUserProfileByJwt(jwt);
         commentService.deleteComment(commentId, user.getId());
         MessageResponse res = new MessageResponse();
-        res.setMessage("comment deleted successfully");
+        res.setMessage("Comment has been deleted successfully");
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
