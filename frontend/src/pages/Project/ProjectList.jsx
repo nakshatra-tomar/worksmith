@@ -1,13 +1,28 @@
 /* eslint-disable no-unused-vars */
 
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import {
+  MixerHorizontalIcon,
+  MagnifyingGlassIcon,
+} from "@radix-ui/react-icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+import { Input } from "@/components/ui/input";
+import ProjectCard from "./ProjectCard";
 
 const ProjectList = () => {
   const tags = [
@@ -24,6 +39,11 @@ const ProjectList = () => {
   ];
   const handleFilterChange = (section, value) => {
     console.log(value, section);
+  };
+
+  const [keyword, setKeyword] = useState("");
+  const handleSearchChange = (e) => {
+    setKeyword(e.target.value);
   };
 
   return (
@@ -94,7 +114,40 @@ const ProjectList = () => {
         </Card>
       </section>
 
-      <section className="projectListSection w-full lg:2-[48rem]"></section>
+      <section className="projectListSection w-full lg:2-[48rem]">
+        <div className="flex gap-2 items-center pb-5 justify-between">
+          <div className="relative p-0 w-full">
+            <Input
+              className="w-[40%] rounded-fulls px-9"
+              placeholder="Search Project"
+              onChange={handleSearchChange}
+            />
+            <MagnifyingGlassIcon className="absolute top-3 left-4" />
+          </div>
+        </div>
+
+        <div>
+          <div className="space-y-5 min-h-[74vh]">
+            {keyword
+              ? [1, 1, 1].map((item, index) => (
+                  <ProjectCard
+                    key={index}
+                    item={{
+                      description: `Description for project ${index + 1}`,
+                    }}
+                  />
+                ))
+              : [1, 1, 1, 1].map((item, index) => (
+                  <ProjectCard
+                    key={index}
+                    item={{
+                      description: `Description for project ${index + 1}`,
+                    }}
+                  />
+                ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
