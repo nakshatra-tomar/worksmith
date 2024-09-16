@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-
 import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   MixerHorizontalIcon,
@@ -11,37 +8,29 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
 import { Input } from "@/components/ui/input";
 import ProjectCard from "./ProjectCard";
 
+export const tags = [
+  "All",
+  "React",
+  "NextJs",
+  "Spring Boot",
+  "MySQL",
+  "MongoDB",
+  "Angular",
+  "Python",
+  "Flask",
+  "Django",
+];
+
 const ProjectList = () => {
-  const tags = [
-    "All",
-    "React",
-    "NextJs",
-    "Spring Boot",
-    "MySQL",
-    "MongoDB",
-    "Angular",
-    "Python",
-    "Flask",
-    "Django",
-  ];
+  const [keyword, setKeyword] = useState("");
+
   const handleFilterChange = (section, value) => {
     console.log(value, section);
   };
 
-  const [keyword, setKeyword] = useState("");
   const handleSearchChange = (e) => {
     setKeyword(e.target.value);
   };
@@ -118,7 +107,7 @@ const ProjectList = () => {
         <div className="flex gap-2 items-center pb-5 justify-between">
           <div className="relative p-0 w-full">
             <Input
-              className="w-[40%] rounded-fulls px-9"
+              className="w-[40%] rounded-full px-9"
               placeholder="Search Project"
               onChange={handleSearchChange}
             />
