@@ -13,6 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
 import InviteUserForm from "./InviteUserForm";
+import IssueList from "../Issue/IssueList";
+import ChatBox from "./ChatBox";
 
 const ProjectDetails = () => {
   const handleProjectInvitation = () => {};
@@ -82,9 +84,21 @@ const ProjectDetails = () => {
                   <Badge>Nakshatra</Badge>
                 </div>
               </div>
+
+              <section>
+                <p className="py-5 border-b text-lg tracking-wider">Tasks</p>
+                <div className="lg:flex md:flex gap-3 justify-between py-5">
+                  <IssueList status="pending" title={"Todo List"} />
+
+                  <IssueList status="in_progress" title={"In Progress"} />
+
+                  <IssueList status="done" title={"Done"} />
+                </div>
+              </section>
             </div>
           </ScrollArea>
         </div>
+        <ChatBox />
       </div>
     </>
   );
