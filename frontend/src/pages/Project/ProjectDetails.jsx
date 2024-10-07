@@ -97,8 +97,10 @@ const ProjectDetails = () => {
               </section>
             </div>
           </ScrollArea>
+          <div className="lg:w-[30%] rounded-md sticky right-5 top-10">
+            <ChatBox />
+          </div>
         </div>
-        <ChatBox />
       </div>
     </>
   );

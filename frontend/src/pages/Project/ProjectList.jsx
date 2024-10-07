@@ -11,18 +11,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import ProjectCard from "./ProjectCard";
 
-export const tags = [
-  "All",
-  "React",
-  "NextJs",
-  "Spring Boot",
-  "MySQL",
-  "MongoDB",
-  "Angular",
-  "Python",
-  "Flask",
-  "Django",
-];
+// Correctly importing tags from filterData.js
+import { tags } from "./filterData";
 
 const ProjectList = () => {
   const [keyword, setKeyword] = useState("");
