@@ -1,0 +1,41 @@
+/* Overall container to hold both sections */
+.authContainer {
+  display: flex;
+  justify-content: space-between; /* Puts space between the two sections */
+  align-items: center; /* Aligns both sections vertically centered */
+  height: 100vh; /* Full height of the viewport */
+  background-color: #1b1b1e; /* Dark background for the page */
+  padding: 0 50px; /* Add some padding to the sides */
+}
+
+/* Left section for the heading */
+.headingSection {
+  flex: 1; /* Take full available space on the left */
+  display: flex;
+  justify-content: center; /* Center the heading horizontally */
+  align-items: center; /* Center the heading vertically */
+}
+
+.siteHeading {
+  font-size: 4rem; /* Large heading text */
+  color: #fff; /* White text color */
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Right section for the form */
+.formSection {
+  flex: 1; /* Take full available space on the right */
+  display: flex;
+  justify-content: center; /* Center the form horizontally */
+  align-items: center; /* Center the form vertically */
+}
+
+/* Box styling remains the same */
+.box {
+  background: #25252b;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  padding-top: 60px;
+}
