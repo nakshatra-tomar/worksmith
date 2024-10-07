@@ -11,7 +11,7 @@ import Auth from "./pages/Auth/Auth";
 function App() {
   return (
     <>
-      {false ? ( //set to false to trigger authentication
+      {true ? ( //set to false to trigger authentication
         <div>
           <Navbar />
           <Routes>

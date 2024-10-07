@@ -50,18 +50,6 @@ const CreateCommentForm = ({ issueId }) => {
                     />
                   </FormControl>
                 </div>
-                <div>
-                  <Avatar>
-                    <AvatarFallback>N</AvatarFallback>
-                  </Avatar>
-                </div>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="w-[20rem]"
-                    placeholder="Add Comment"
-                  />
-                </FormControl>
 
                 <FormMessage />
               </FormItem>
