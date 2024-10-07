@@ -22,10 +22,15 @@ import { useNavigate } from "react-router-dom";
 import CreateProjectForm from "../Project/CreateProjectForm";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="border-b  py-4 px-5 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <h1 className="cursor-pointer scroll-m-20 text-xl font-bold tracking-tight lg:text-3xl">
+        <h1
+          onClick={() => navigate("/")}
+          className="cursor-pointer scroll-m-20 text-xl font-bold tracking-tight lg:text-3xl"
+        >
           WorkSmith
         </h1>
         <Dialog>

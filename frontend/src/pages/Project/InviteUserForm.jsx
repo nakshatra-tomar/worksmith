@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
 import React from "react";
+import { DialogClose } from "@/components/ui/dialog";
 
 const InviteUserForm = ({ projectId }) => {
   const form = useForm({
@@ -43,10 +44,11 @@ const InviteUserForm = ({ projectId }) => {
               </FormItem>
             )}
           />
-
-          <Button type="submit" className="w-full bg-slate-400 py-5">
-            Send Invitation
-          </Button>
+          <DialogClose>
+            <Button type="submit" className="w-full bg-slate-400 py-5">
+              Send Invitation
+            </Button>
+          </DialogClose>
         </form>
       </Form>
     </div>
