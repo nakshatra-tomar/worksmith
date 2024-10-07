@@ -9,7 +9,9 @@ const Auth = () => {
   return (
     <div className="authContainer">
       <div className="headingSection">
-        <h1 className="siteHeading">WorkSmith</h1>
+        <h1 className="siteHeading">
+          WorkSmith<span>{"</>"}</span>
+        </h1>
       </div>
 
       <div className="formSection loginContainer">

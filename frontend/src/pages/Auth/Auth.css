@@ -1,37 +1,33 @@
-/* Overall container to hold both sections */
 .authContainer {
   display: flex;
-  justify-content: space-between; /* Puts space between the two sections */
-  align-items: center; /* Aligns both sections vertically centered */
-  height: 100vh; /* Full height of the viewport */
-  background-color: #1b1b1e; /* Dark background for the page */
-  padding: 0 50px; /* Add some padding to the sides */
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  background-color: #1b1b1e;
+  padding: 0 50px;
 }
 
-/* Left section for the heading */
 .headingSection {
-  flex: 1; /* Take full available space on the left */
+  flex: 1;
   display: flex;
-  justify-content: center; /* Center the heading horizontally */
-  align-items: center; /* Center the heading vertically */
+  justify-content: center;
+  align-items: center;
 }
 
 .siteHeading {
-  font-size: 4rem; /* Large heading text */
-  color: #fff; /* White text color */
+  font-size: 4rem;
+  color: #fff;
   text-align: center;
   font-weight: bold;
 }
 
-/* Right section for the form */
 .formSection {
-  flex: 1; /* Take full available space on the right */
+  flex: 1;
   display: flex;
-  justify-content: center; /* Center the form horizontally */
-  align-items: center; /* Center the form vertically */
+  justify-content: center;
+  align-items: center;
 }
 
-/* Box styling remains the same */
 .box {
   background: #25252b;
   border-radius: 10px;
