@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   MixerHorizontalIcon,
@@ -13,16 +13,36 @@ import ProjectCard from "./ProjectCard";
 
 // Correctly importing tags from filterData.js
 import { tags } from "./filterData";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProjects, searchProjects } from "@/redux/Project/Project.Action";
 
 const ProjectList = () => {
   const [keyword, setKeyword] = useState("");
 
-  const handleFilterChange = (section, value) => {
-    console.log(value, section);
+  const { project } = useSelector((store) => store);
+  const dispatch = useDispatch();
+
+  const handleFilterCategory = (value) => {
+    if (value == "all") {
+      dispatch(fetchProjects({}));
+    } else {
+      console.log(value);
+      dispatch(fetchProjects({ category: value }));
+    }
+  };
+
+  const handleFilterTags = (value) => {
+    if (value == "all") {
+      dispatch(fetchProjects({}));
+    } else dispatch(fetchProjects({ tag: value }));
   };
 
   const handleSearchChange = (e) => {
     setKeyword(e.target.value);
+    if (e.target.value) {
+      dispatch(searchProjects(e.target.value));
+    }
   };
 
   return (
@@ -46,24 +66,24 @@ const ProjectList = () => {
                 </h4>
                 <div className="pt-5">
                   <RadioGroup
-                    className="space-y-3 pt-5"
+                    className="space-y-3"
                     defaultValue="all"
-                    onValueChange={(value) => handleFilterChange("tag", value)}
+                    onValueChange={(value) => handleFilterCategory(value)}
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="all" id="r1" />
                       <Label htmlFor="r1">All</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="fullstack" id="r2" />
+                      <RadioGroupItem value="Full Stack" id="r2" />
                       <Label htmlFor="r2">Full Stack</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="frontend" id="r3" />
+                      <RadioGroupItem value="Frontend" id="r3" />
                       <Label htmlFor="r3">Frontend</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="backend" id="r4" />
+                      <RadioGroupItem value="Backend" id="r4" />
                       <Label htmlFor="r4">Backend</Label>
                     </div>
                   </RadioGroup>
@@ -78,12 +98,12 @@ const ProjectList = () => {
                 <RadioGroup
                   className="space-y-3 pt-5"
                   defaultValue="all"
-                  onValueChange={(value) => handleFilterChange("tag", value)}
+                  onValueChange={(value) => handleFilterTags(value)}
                 >
                   {tags.map((item) => (
-                    <div key={item} className="flex items-center space-x-2">
-                      <RadioGroupItem value={item} id={`r-${item}`} />
-                      <Label htmlFor={`r-${item}`}>{item}</Label>
+                    <div key={item} className="flex items-center gap-2">
+                      <RadioGroupItem value={item} id={`r1-${item}`} />
+                      <Label htmlFor={`r1-${item}`}>{item}</Label>
                     </div>
                   ))}
                 </RadioGroup>
@@ -108,23 +128,20 @@ const ProjectList = () => {
         <div>
           <div className="space-y-5 min-h-[74vh]">
             {keyword
-              ? [1, 1, 1].map((item, index) => (
-                  <ProjectCard
-                    key={index}
-                    item={{
-                      description: `Description for project ${index + 1}`,
-                    }}
-                  />
+              ? project.searchProjects.map((item) => (
+                  <ProjectCard item={item} key={item.id} />
                 ))
-              : [1, 1, 1, 1].map((item, index) => (
-                  <ProjectCard
-                    key={index}
-                    item={{
-                      description: `Description for project ${index + 1}`,
-                    }}
-                  />
+              : project.projects.map((item) => (
+                  <ProjectCard item={item} key={item.id} />
                 ))}
           </div>
+          {project.projects.length > 0 ? (
+            <div></div>
+          ) : (
+            <div className="flex items-center justify-center h-[80vh]">
+              <h1>No projects available</h1>
+            </div>
+          )}
         </div>
       </section>
     </div>

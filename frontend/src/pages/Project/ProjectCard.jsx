@@ -8,14 +8,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { deleteProject } from "@/redux/Project/Project.Action";
 
 import { DotFilledIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ item }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleDeleteProject = () => {
+    dispatch(deleteProject({ projectId: item.id }));
+  };
+
   return (
     <Card className="p-5 w-full lg:max-w-3xl">
       <div className="space-y-5">
@@ -23,13 +31,13 @@ const ProjectCard = ({ item }) => {
           <div className="flex justify-between">
             <div className="flex items-center gap-5">
               <h1
-                onClick={() => navigate("/project/3")}
+                onClick={() => navigate(`/project/${item.id}`)}
                 className=" cursor-pointer font-bold text-lg "
               >
-                Project 1 Under Dev
+                {item.name}
               </h1>
               <DotFilledIcon />
-              <p className="text-sm text-gray-400">Full Stack</p>
+              <p className="text-sm text-gray-400">{item.category}</p>
             </div>
             <div>
               <DropdownMenu>
@@ -39,8 +47,14 @@ const ProjectCard = ({ item }) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Update</DropdownMenuItem>
-                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => navigate(`/project/update/${item.id}`)}
+                  >
+                    Update
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleDeleteProject}>
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -50,9 +64,9 @@ const ProjectCard = ({ item }) => {
         </div>
 
         <div className="flex flex-wrap gap-2 items-center">
-          {[1, 1, 1, 1].map((item) => (
+          {item.tags.map((tag) => (
             <Badge key={item} variant="outline">
-              {"Frontend"}
+              {tag}
             </Badge>
           ))}
         </div>

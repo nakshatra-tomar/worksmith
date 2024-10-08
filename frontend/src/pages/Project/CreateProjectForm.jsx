@@ -23,8 +23,10 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { DialogClose } from "@/components/ui/dialog";
 import { tags } from "./filterData";
+import { createProject } from "@/redux/Project/Project.Action";
 
 const CreateProjectForm = () => {
+  const dispatch = useDispatch();
   const handleTagsChange = (newValue) => {
     const currentTags = form.getValues("tags");
 
@@ -41,13 +43,14 @@ const CreateProjectForm = () => {
     defaultValues: {
       name: "",
       description: "",
-      category: "fullstack",
+      category: "Full Stack",
       tags: ["Javascript", "React"],
     },
   });
 
   const onSubmit = (data) => {
-    console.log("Create project", data);
+    dispatch(createProject(data));
+    console.log("Created Project", data);
   };
 
   return (

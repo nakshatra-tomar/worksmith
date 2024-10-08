@@ -22,54 +22,47 @@ import java.util.Collections;
 public class AppConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http.sessionManagement(Management -> Management.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**")
+                        .authenticated().anyRequest().permitAll())
+                .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        http.sessionManagement(Management -> Management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize->Authorize.requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf-> csrf.disable())
-                .cors(cors->cors.configurationSource(corsConfigurationSource()));
-//if any endpoint access starts with /api, it should be authenticated, without JWT token it should not be accessible
-        //sign up and login works without token
         return http.build();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
-
-
+        // TODO Auto-generated method stub
         return new CorsConfigurationSource() {
+
             @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+            public CorsConfiguration getCorsConfiguration(
+                    HttpServletRequest request) {
+                // TODO Auto-generated method stub
                 CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(Arrays.asList( //has local ports which can access
-                        "https://localhost:3000",
-                        "https://localhost:5173",
-                        "https://localhost:4200" //for angular
-                ));
-                cfg.setAllowedMethods(Collections.singletonList("*"));//HTTP methods which are to be accessible, POST/GET, currently all allowed
+
+                cfg.setAllowedOrigins(Arrays.asList(
+                        "http://localhost:3000",
+                        "http://localhost:5173",
+                        "https://project-management-react-plum.vercel.app"));
+                cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
-                cfg.setAllowedHeaders(Collections.singletonList("*")); // all header files allowed
-
+                cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setExposedHeaders(Arrays.asList("Authorization"));
-
                 cfg.setMaxAge(3600L);
-
-
                 return cfg;
-
-
             }
         };
-
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
 
 }

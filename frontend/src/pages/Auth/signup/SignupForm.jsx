@@ -7,10 +7,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { register } from "@/redux/Auth/Action";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const SignupForm = () => {
+  const dispatch = useDispatch();
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -21,6 +25,8 @@ const SignupForm = () => {
 
   const onSubmit = (data) => {
     // Handle form submission here
+
+    dispatch(register(data));
     console.log("Add data", data);
   };
   return (
