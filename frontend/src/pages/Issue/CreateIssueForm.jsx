@@ -8,10 +8,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createIssue } from "@/redux/Issue/Issue.action";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
-const CreateIssueForm = () => {
+const CreateIssueForm = ({ status }) => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
   const form = useForm({
     defaultValues: {
       issueName: "",
@@ -21,6 +27,16 @@ const CreateIssueForm = () => {
 
   const onSubmit = (data) => {
     console.log("Add project data", data);
+
+    data.projectId = id;
+    dispatch(
+      createIssue({
+        title: data.issueName,
+        description: data.description,
+        projectId: id,
+        status,
+      })
+    );
   };
   return (
     <div>
@@ -28,7 +44,7 @@ const CreateIssueForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="issuename"
+            name="issueName"
             render={({ field }) => (
               <FormItem>
                 <FormControl>

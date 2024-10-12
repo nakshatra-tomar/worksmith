@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
+import React, { useEffect } from "react";
 import CommentCard from "./CommentCard";
 import CreateCommentForm from "./CreateCommentForm";
 import { useParams } from "react-router-dom";
@@ -13,22 +13,37 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIssueById, updateIssueStatus } from "@/redux/Issue/Issue.action";
+import { fetchComments } from "@/redux/Comment/Comment.Action";
 
 const IssueDetails = () => {
-  const { projectId, issueId } = useParams();
+  const { issueId } = useParams();
+  const dispatch = useDispatch();
+  const { issue, comment } = useSelector((store) => store);
+
+  useEffect(() => {
+    dispatch(fetchIssueById(issueId));
+    dispatch(fetchComments(issueId));
+  }, []);
+
+  const handleUpdateIssueStatus = (value) => {
+    dispatch(updateIssueStatus({ id: issueId, status: value }));
+  };
+
   return (
     <div className="px-20 py-8 text-gray-400">
       <div className="flex justify-between border p-10 rounded-lg">
         <ScrollArea className="h-[80vh] w-[60%] ">
           <div className="">
             <h1 className="text-lg font-semibold text-gray-400">
-              Add load balancing
+              {issue.issueDetails?.title}
             </h1>
 
             <div className="py-5">
               <h2 className="font-semibold text-gray-400">Description</h2>
               <p className="text-gray-400 text-sm mt-3">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                {issue.issueDetails?.description}
               </p>
             </div>
             <div className="mt-5">
@@ -39,12 +54,12 @@ const IssueDetails = () => {
                   <TabsTrigger value="comments">Comments</TabsTrigger>
                   <TabsTrigger value="history">History</TabsTrigger>
                 </TabsList>
-                <TabsContent value="all">Make and add stuff</TabsContent>
+                <TabsContent value="all">Add stuff here</TabsContent>
                 <TabsContent value="comments">
                   <CreateCommentForm issueId={issueId} />
                   <div className="mt-8 space-y-6">
-                    {[1, 1, 1].map((item) => (
-                      <CommentCard key={item} />
+                    {comment.comments.map((item, index) => (
+                      <CommentCard item={item} key={index} />
                     ))}
                   </div>
                 </TabsContent>
@@ -55,14 +70,14 @@ const IssueDetails = () => {
         </ScrollArea>
 
         <div className="w-full lg:w-[30%] space-y-2">
-          <Select>
+          <Select onValueChange={handleUpdateIssueStatus}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder={"To Do"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="pending">To Do</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
+              <SelectItem value="Pending">To Do</SelectItem>
+              <SelectItem value="In Progress">In Progress</SelectItem>
+              <SelectItem value="Done">Done</SelectItem>
             </SelectContent>
           </Select>
 
@@ -73,13 +88,16 @@ const IssueDetails = () => {
               <div className="space-y-7">
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Assignee</p>
-
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8 text-xs">
-                      <AvatarFallback>N</AvatarFallback>
-                    </Avatar>
-                    <p>Nakshatra Tomar</p>
-                  </div>
+                  {issue.issueDetails?.assignee?.fullName ? (
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8 text-xs">
+                        <AvatarFallback>N</AvatarFallback>
+                      </Avatar>
+                      <p>{issue.issueDetails?.assignee?.fullName}</p>
+                    </div>
+                  ) : (
+                    "-"
+                  )}
                 </div>
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Labels</p>
@@ -87,22 +105,36 @@ const IssueDetails = () => {
                 </div>
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Status</p>
-                  <Badge>In Progress</Badge>
+                  <Badge
+                    className={`${
+                      issue.issueDetails?.status == "In Progress"
+                        ? "bg-orange-300"
+                        : issue.issueDetails?.status == "Done"
+                        ? "bg-green-500"
+                        : ""
+                    }`}
+                  >
+                    {issue.issueDetails?.status}
+                  </Badge>
                 </div>
 
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Release</p>
-                  <div className="flex items-center gap-3">7/10/24</div>
+                  <div className="flex items-center gap-3">-</div>
                 </div>
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Reporter</p>
 
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8 text-xs">
-                      <AvatarFallback>L</AvatarFallback>
-                    </Avatar>
-                    <p>Lorem Ipsum</p>
-                  </div>
+                  {issue.issueDetails?.assignee ? (
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8 text-xs">
+                        <AvatarFallback>L</AvatarFallback>
+                      </Avatar>
+                      <p>Lorem</p>
+                    </div>
+                  ) : (
+                    <div>-</div>
+                  )}
                 </div>
               </div>
             </div>

@@ -24,7 +24,7 @@ const ProjectList = () => {
   const dispatch = useDispatch();
 
   const handleFilterCategory = (value) => {
-    if (value == "all") {
+    if (value == "All") {
       dispatch(fetchProjects({}));
     } else {
       console.log(value);
@@ -33,7 +33,7 @@ const ProjectList = () => {
   };
 
   const handleFilterTags = (value) => {
-    if (value == "all") {
+    if (value == "All") {
       dispatch(fetchProjects({}));
     } else dispatch(fetchProjects({ tag: value }));
   };
@@ -67,11 +67,11 @@ const ProjectList = () => {
                 <div className="pt-5">
                   <RadioGroup
                     className="space-y-3"
-                    defaultValue="all"
+                    defaultValue="All"
                     onValueChange={(value) => handleFilterCategory(value)}
                   >
                     <div className="flex items-center gap-2">
-                      <RadioGroupItem value="all" id="r1" />
+                      <RadioGroupItem value="All" id="r1" />
                       <Label htmlFor="r1">All</Label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -97,7 +97,7 @@ const ProjectList = () => {
 
                 <RadioGroup
                   className="space-y-3 pt-5"
-                  defaultValue="all"
+                  defaultValue="All"
                   onValueChange={(value) => handleFilterTags(value)}
                 >
                   {tags.map((item) => (

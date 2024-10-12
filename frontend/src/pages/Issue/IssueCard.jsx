@@ -11,36 +11,46 @@ import {
 } from "@/components/ui/dropdown-menu";
 import React from "react";
 import UserList from "./UserList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteIssue } from "@/redux/Issue/Issue.action";
 
 const IssueCard = ({ item }) => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const handleDelete = () => {
+    dispatch(deleteIssue(item.id));
+  };
+
   return (
     <Card className="rounded-md py-1 pb-2">
       <CardHeader className="py-0 pb-1">
         <div className="flex justify-between items-center">
           <CardTitle
             className="cursor-pointer"
-            onClick={() => navigate("/project/3/issue/10")}
+            onClick={() => navigate(`/project/${id}/issue/${item.id}`)}
           >
-            Create Navbar
+            {item.title}
           </CardTitle>
 
           <DropdownMenu>
             <DropdownMenuTrigger>
+              {" "}
               <Button
                 className="rounded-full focus:outline-none"
                 variant="ghost"
                 size="icon"
               >
-                <DotsVerticalIcon />
+                <DotsVerticalIcon />{" "}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>In Progress</DropdownMenuItem>
               <DropdownMenuItem>Done</DropdownMenuItem>
               <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -57,13 +67,13 @@ const IssueCard = ({ item }) => {
               >
                 <Avatar>
                   <AvatarFallback>
-                    <PersonIcon />
+                    {item.assignee?.fullName[0].toUpperCase() || <PersonIcon />}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <UserList />
+              <UserList issueDetails={item} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

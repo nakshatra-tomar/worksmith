@@ -48,7 +48,7 @@ export const updateIssueStatus = ({ id, status }) => {
     dispatch({ type: actionTypes.UPDATE_ISSUE_STATUS_REQUEST });
     try {
       const response = await api.put(`/api/issues/${id}/status/${status}`);
-      console.log("update issue status", response.data);
+      console.log("Updated issue status", response.data);
       dispatch({
         type: actionTypes.UPDATE_ISSUE_STATUS_SUCCESS,
         issues: response.data,
