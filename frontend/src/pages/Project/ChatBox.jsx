@@ -2,17 +2,57 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  fetchChatByProject,
+  fetchChatMessages,
+  sendMessage,
+} from "@/redux/Chat/Action";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const ChatBox = () => {
   const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { chat, auth } = useSelector((store) => store);
+  const chatContainerRef = useRef(null);
+
+  const handleMessageChange = (e) => setMessage(e.target.value);
+
+  useEffect(() => {
+    dispatch(fetchChatByProject(id));
+  }, []);
+
+  useEffect(() => {
+    if (chat.chat) {
+      dispatch(fetchChatMessages(chat.chat?.id));
+    }
+  }, [chat.chat]);
+
   const handleSendMessage = () => {
-    console.log("Message", message);
+    dispatch(
+      sendMessage({
+        message: {
+          senderId: auth.user?.id,
+          projectId: id,
+          content: message,
+        },
+        sendToServer: sendMessageToServer,
+      })
+    );
+    setMessage("");
   };
 
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chat.messages]);
+
+  const sendMessageToServer = (message) => {
+    console.log(message);
   };
 
   return (
@@ -21,23 +61,27 @@ const ChatBox = () => {
         <h1 className="border-b p-5">Chat Box</h1>
 
         <ScrollArea className="h-[32rem] w-full p-5 flex gap-3 flex-col">
-          {[1, 1, 1, 1].map((item, index) =>
-            index % 2 == 0 ? (
-              <div key={item} className="flex gap-2 mb-2 justify-start">
+          {chat.messages?.map((item, i) =>
+            item.sender.id == auth.user.id ? (
+              <div
+                ref={chatContainerRef}
+                key={item}
+                className="flex gap-2 mb-2 justify-start"
+              >
                 <Avatar>
-                  <AvatarFallback>N</AvatarFallback>
+                  <AvatarFallback>{item.sender.fullName[0]}</AvatarFallback>
                 </Avatar>
 
                 <div className="space-y-2 py-2 px-5 border rounded-ss-2xl rounded-e-xl">
-                  <p>Nakshatra Tomar</p>
-                  <p className="text-gray-300">Sample message</p>
+                  <p>{item.sender?.fullName}</p>
+                  <p className="text-gray-300">{item.content}</p>
                 </div>
               </div>
             ) : (
               <div key={item} className="flex gap-2 mb-2 justify-end">
                 <div className="space-y-2 py-2 px-5 border rounded-se-2xl rounded-s-xl">
-                  <p>Lorem Ipsum</p>
-                  <p className="text-gray-300">Sample message</p>
+                  <p>{item.sender?.fullName}</p>
+                  <p className="text-gray-300">{item.sender.fullName[0]}</p>
                 </div>
 
                 <Avatar>
